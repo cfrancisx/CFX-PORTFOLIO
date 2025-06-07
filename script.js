@@ -100,26 +100,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Form submission
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const name = this.querySelector('input[type="text"]').value;
-            const email = this.querySelector('input[type="email"]').value;
-            const subject = this.querySelector('input[type="text"]:nth-of-type(2)').value;
-            const message = this.querySelector('textarea').value;
-            
-            // Here you would typically send the form data to a server
-            console.log('Form submitted:', { name, email, subject, message });
-            
-            // Show success message
-            alert('Thank you for your message! I will get back to you soon.');
-            
-            // Reset form
-            this.reset();
-        });
+
+    // EmailJS form submission
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init("Pn0txsP91cLWYBIxV");
+        const contactForm = document.querySelector('.contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                emailjs.sendForm('service_29mj6pu', 'template_j5e5szz', this)
+                    .then(function () {
+                        alert('Message sent!');
+                    }, function (error) {
+                        alert('Failed to send message: ' + JSON.stringify(error));
+                    });
+            });
+        }
     }
 });
